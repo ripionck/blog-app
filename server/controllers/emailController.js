@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const logger = require("../utils/logger");
 
-const webURL = process.env.webURL || "";
+const webURL = process.env.webURL || "http://localhost:3001/api/";
 
 const config = {
   service: process.env.EMAIL_SERVICE,

@@ -10,7 +10,7 @@ userRouter.post("/signup", async (req, res) => {
     if (result.status === 201) {
       res
         .status(result.status)
-        .json({ message: result.message, value: result.token });
+        .json({ message: result.message, token: result.token });
     } else if (result.status === 400) {
       res.status(result.status).json({ error: result.message });
     } else {
