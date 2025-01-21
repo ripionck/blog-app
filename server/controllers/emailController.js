@@ -85,10 +85,10 @@ const sendForgotPasswordMail = async (email, firstname, token) => {
   sendMail(data);
 };
 
-const emailService = {
+const emailController = {
   sendMail,
   sendActivationMail,
   sendForgotPasswordMail,
 };
 
-module.exports = emailService;
+module.exports = emailController;

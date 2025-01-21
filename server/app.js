@@ -4,6 +4,7 @@ const app = express();
 
 const cors = require("cors");
 const mongoose = require("mongoose");
+const userRouter = require("./routes/userRouter");
 
 mongoose.set("strictQuery", false);
 mongoose
@@ -17,5 +18,7 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/user", userRouter);
 
 module.exports = app;
