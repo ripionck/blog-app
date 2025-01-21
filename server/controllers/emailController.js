@@ -3,8 +3,6 @@ require("dotenv").config();
 
 const logger = require("../utils/logger");
 
-const webURL = process.env.webURL || "http://localhost:3001/api/";
-
 const config = {
   service: process.env.EMAIL_SERVICE,
   host: process.env.EMAIL_HOST,
@@ -20,69 +18,81 @@ const sendMail = async (data) => {
   const transporter = nodemailer.createTransport(config);
   transporter.sendMail(data, (err, info) => {
     if (err) {
-      `Error sending mail to ${data.to}`;
-      logger.error(`Error sending ${data.subject} to ${data.to}, \n ${err}`);
-      err;
+      logger.error(`Error sending email to ${data.to}: ${err.message}`);
+      throw new Error(`Error sending email to ${data.to}: ${err.message}`);
     } else {
-      logger.info(`Email ${data.subject} sent successfully to ${data.to}`)(
-        info.response,
-      );
+      logger.info(`Email "${data.subject}" sent successfully to ${data.to}`);
     }
   });
 };
 
 const generateActivationUrl = async (activationToken) => {
-  return `${webURL}/active-account?token=${activationToken}`;
+  const webURL = process.env.WEB_URL || "http://localhost:3001";
+  return `${webURL}/activate-account?token=${activationToken}`;
 };
 
 const sendActivationMail = async (email, firstname, activationToken) => {
   const activationUrl = await generateActivationUrl(activationToken);
 
-  const data = {
+  const emailData = {
     from: config.auth.user,
     to: email,
-    subject: `Email Activation Message.`,
+    subject: "Activate Your Account",
     text: `
-    Dear ${firstname},
+  Hi ${firstname},
 
-    Welcome to BlogApp, we're excited to have you as a part of our community.
+  Welcome to our platform! We're excited to have you on board. To complete your registration and activate your account, please click the link below:
 
-    ${activationUrl}
-    
-    If you didn't request this activation, please ignore this message. Your account won't be activated until you click the link above.
+  Activate Your Account: ${activationUrl}
 
-    Thank you for choosing BlogApp. We look forward to providing you with a great experience.
+  If you did not create an account with us, please ignore this email.
 
-    Best regards,
-    The BlogApp Team
+  Best regards,  
+  The Team
     `,
   };
 
-  sendMail(data);
+  try {
+    await sendMail(emailData);
+    console.log(`Activation email sent to ${email}`);
+  } catch (error) {
+    console.error(`Error sending activation email to ${email}:`, error.message);
+    throw error;
+  }
 };
 
 const sendForgotPasswordMail = async (email, firstname, token) => {
+  const webURL = process.env.WEB_URL || "http://localhost:3001";
   const url = `${webURL}/reset-password/${token}`;
 
-  const data = {
+  const emailData = {
     from: config.auth.user,
     to: email,
     subject: "Password Reset Request",
-    text: ` 
+    text: `
     Hi ${firstname},
 
-    You've requested a password reset for your account. To reset your password, please visit the following link:
+    We received a request to reset the password for your account. If you made this request, you can reset your password using the link below:
 
     Reset Your Password: ${url}
 
-    If you didn't request a password reset, you can ignore this email.
+    If you did not request a password reset, please ignore this email. Your account remains secure.
 
-    Best regards,
+    Best regards,  
     The BlogApp Team
     `,
   };
 
-  sendMail(data);
+  try {
+    await sendMail(emailData);
+    console.log(`Password reset email sent to ${email}`);
+  } catch (error) {
+    console.error(
+      `Error sending password reset email to ${email}:`,
+      error.message,
+    );
+    throw error;
+  }
 };
 
 const emailController = {
