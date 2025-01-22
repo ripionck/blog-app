@@ -13,8 +13,15 @@ const calculateReadingTime = (data) => {
 
 const uid = new ShortUniqueId({ length: 10 }).rnd();
 
+const generateSlug = (data) => {
+  return data
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+};
+
 const slugIt = (data) => {
-  const slugged = `${slug(data)}-${uid}`;
+  const slugged = `${generateSlug(data)}-${uid}`;
   return slugged;
 };
 
