@@ -122,11 +122,97 @@ const updateComment = async (authorId, commentId, updateData) => {
   }
 };
 
+const deleteComment = async (authorId, commentId) => {
+  try {
+    const comment = await Comment.findOne({
+      _id: commentId,
+      author: authorId,
+      is_deleted: false,
+    });
+
+    if (!comment) {
+      return {
+        status: 404,
+        message: "Comment not found or doesn't belong to you",
+        data: null,
+      };
+    }
+
+    comment.is_deleted = true;
+    await comment.save();
+
+    logger.info(
+      `User with ID: ${authorId} deleted comment: ${commentId} successfully`,
+    );
+
+    return {
+      status: 200,
+      message: "Comment deleted successfully",
+      data: comment,
+    };
+  } catch (error) {
+    console.error("Error occurred while deleting the comment:", error.message);
+    logger.error(
+      `Error occurred while user with ID: ${authorId} tried to delete comment: ${commentId}\n${error.message}`,
+    );
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
+const toggleLikeComment = async (userId, commentId) => {
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return {
+        status: 404,
+        message: "Comment not found or does not exist",
+        data: null,
+      };
+    }
+
+    const isLiked = comment.likes.includes(userId);
+
+    if (isLiked) {
+      comment.likes = comment.likes.filter(
+        (like) => like.toString() !== userId,
+      );
+    } else {
+      comment.likes.push(userId);
+    }
+
+    await comment.save();
+
+    logger.info(
+      `User with ID: ${userId} ${
+        isLiked ? "unliked" : "liked"
+      } comment: ${commentId} successfully`,
+    );
+
+    return {
+      status: 200,
+      message: `Comment ${isLiked ? "unliked" : "liked"} successfully`,
+      comment: comment,
+    };
+  } catch (error) {
+    console.error(
+      "Error occurred while toggling like on the comment:",
+      error.message,
+    );
+    logger.error(
+      `Error occurred while user with ID: ${userId} tried to toggle like on comment: ${commentId}\n${error.message}`,
+    );
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
 const commentController = {
   getComments,
   getComment,
   addComment,
   updateComment,
+  deleteComment,
+  toggleLikeComment,
 };
 
 module.exports = commentController;
