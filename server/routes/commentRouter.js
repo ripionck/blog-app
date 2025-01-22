@@ -119,4 +119,24 @@ commentRouter.put("/:commentId", async (req, res) => {
   }
 });
 
+commentRouter.delete("/:commentId", async (req, res) => {
+  try {
+    const commentId = req.params.commentId;
+    const userId = req.user._id;
+
+    const result = await commentController.deleteComment(userId, commentId);
+
+    if (result.status === 200) {
+      return res
+        .status(result.status)
+        .json({ message: result.message, data: result.data });
+    } else {
+      return res.status(result.status).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error("Error occurred while deleting the comment:", error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = commentRouter;
