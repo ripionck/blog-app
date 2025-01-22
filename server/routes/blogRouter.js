@@ -7,7 +7,7 @@ const { cloudinary } = require("../config/cloudinary.config");
 const uploader = require("../config/multer.config");
 
 blogRouter.post(
-  "/create",
+  "",
   authenticate,
   isActivated,
   uploader.single("file"),
@@ -134,6 +134,51 @@ blogRouter.put(
       }
     } catch (error) {
       console.error("Error occurred while updating the blog:", error.message);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+blogRouter.delete("/:blogId", authenticate, isActivated, async (req, res) => {
+  try {
+    const authorId = req.user._id;
+    const blogId = req.params.blogId;
+
+    const result = await blogController.deleteBlog(authorId, blogId);
+
+    if (result.status === 200) {
+      return res
+        .status(result.status)
+        .json({ message: result.message, blog: result.blog });
+    } else {
+      return res.status(result.status).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error("Error occurred while deleting the blog:", error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+blogRouter.post(
+  "/publish/:blogId",
+  authenticate,
+  isActivated,
+  async (req, res) => {
+    try {
+      const authorId = req.user._id;
+      const blogId = req.params.blogId;
+
+      const result = await blogController.publishBlog(authorId, blogId);
+
+      if (result.status === 200) {
+        return res
+          .status(result.status)
+          .json({ message: result.message, blog: result.blog });
+      } else {
+        return res.status(result.status).json({ error: result.message });
+      }
+    } catch (error) {
+      console.error("Error occurred while publishing the blog:", error.message);
       return res.status(500).json({ error: "Internal server error" });
     }
   },

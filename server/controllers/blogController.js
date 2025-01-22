@@ -241,12 +241,88 @@ const getMyBlogs = async (authorId, params) => {
   }
 };
 
+const deleteBlog = async (authorId, blogId) => {
+  try {
+    const blog = await Blog.findOneAndDelete({ author: authorId, _id: blogId });
+
+    if (!blog) {
+      return {
+        status: 404,
+        message: `Blog with ID ${blogId} not found or doesn't belong to you`,
+      };
+    }
+
+    logger.info(
+      `User with ID: ${authorId} deleted blog: ${blogId} successfully`,
+    );
+
+    return {
+      status: 200,
+      message: `Blog with ID ${blogId} deleted successfully`,
+      blog,
+    };
+  } catch (error) {
+    console.error("Error occurred while deleting the blog:", error.message);
+    logger.error(
+      `Error occurred while user with ID: ${authorId} tried to delete blog: ${blogId}\n${error.message}`,
+    );
+    return {
+      status: 500,
+      message: "Error deleting the blog",
+      error: error.message,
+    };
+  }
+};
+
+const publishBlog = async (authorId, blogId) => {
+  try {
+    const blog = await Blog.findOne({ author: authorId, _id: blogId });
+
+    if (!blog) {
+      return {
+        status: 404,
+        message: `Blog with ID ${blogId} not found or doesn't belong to you`,
+      };
+    }
+
+    blog.state = "published";
+    await blog.save();
+
+    logger.info(
+      `User with ID: ${authorId} published blog: ${blogId} successfully`,
+    );
+
+    const author = await User.findById(authorId);
+    const authorData = { ...author._doc };
+    delete authorData.password;
+
+    return {
+      status: 200,
+      message: "Blog published successfully",
+      blog,
+      author: authorData,
+    };
+  } catch (error) {
+    console.error("Error occurred while publishing the blog:", error.message);
+    logger.error(
+      `Error occurred while user with ID: ${authorId} tried to publish blog: ${blogId}\n${error.message}`,
+    );
+    return {
+      status: 500,
+      message: "Error publishing the blog",
+      error: error.message,
+    };
+  }
+};
+
 const blogController = {
   createBlog,
   getBlogs,
   getBlog,
   getMyBlogs,
   updateBlog,
+  deleteBlog,
+  publishBlog,
 };
 
 module.exports = blogController;
