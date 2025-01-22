@@ -69,6 +69,26 @@ blogRouter.get("", async (req, res) => {
   }
 });
 
+blogRouter.get("/my-blogs", authenticate, isActivated, async (req, res) => {
+  try {
+    const authorId = req.user._id;
+    const params = { ...req.query };
+
+    const result = await blogController.getMyBlogs(authorId, params);
+
+    if (result.status === 200) {
+      return res
+        .status(result.status)
+        .json({ message: result.message, data: result.data });
+    } else {
+      return res.status(result.status).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error("Error occurred while fetching user blogs:", error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 blogRouter.get("/:slugOrId", async (req, res) => {
   try {
     const slugOrId = req.params.slugOrId;
@@ -86,5 +106,37 @@ blogRouter.get("/:slugOrId", async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+
+blogRouter.put(
+  "/:blogId",
+  authenticate,
+  isActivated,
+  uploader.none(),
+  async (req, res) => {
+    try {
+      const authorId = req.user._id;
+      const blogId = req.params.blogId;
+      const updateBlogData = req.body;
+      console.log("Update Blog Data:", updateBlogData);
+
+      const result = await blogController.updateBlog(
+        authorId,
+        blogId,
+        updateBlogData,
+      );
+
+      if (result.status === 200) {
+        return res
+          .status(result.status)
+          .json({ message: result.message, blog: result.blog });
+      } else {
+        return res.status(result.status).json({ error: result.message });
+      }
+    } catch (error) {
+      console.error("Error occurred while updating the blog:", error.message);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
 
 module.exports = blogRouter;

@@ -149,10 +149,104 @@ const getBlog = async (blogIdOrSlug) => {
   }
 };
 
+const updateBlog = async (authorId, blogId, updateBlogData) => {
+  try {
+    const blogExist = await Blog.findOne({ _id: blogId, author: authorId });
+
+    if (!blogExist) {
+      return {
+        status: 404,
+        message: `Blog with ID ${blogId} not found or doesn't belong to you`,
+      };
+    }
+
+    let slug;
+    let reading_time;
+
+    if (updateBlogData.body) {
+      reading_time = utils.calculateReadingTime(updateBlogData.body);
+    }
+
+    if (updateBlogData.title) {
+      slug = utils.slugIt(updateBlogData.title);
+    }
+
+    blogExist.title = updateBlogData.title || blogExist.title;
+    blogExist.description = updateBlogData.description || blogExist.description;
+    blogExist.tags = updateBlogData.tags || blogExist.tags;
+    blogExist.body = updateBlogData.body || blogExist.body;
+    blogExist.slug = slug || blogExist.slug;
+    blogExist.reading_time = reading_time || blogExist.reading_time;
+    blogExist.state = updateBlogData.state || blogExist.state;
+
+    await blogExist.save();
+
+    logger.info(
+      `User with ID: ${authorId} updated blog: ${blogId} successfully`,
+    );
+
+    return {
+      status: 200,
+      message: "Blog updated successfully",
+      blog: blogExist,
+    };
+  } catch (error) {
+    console.error("Error occurred while updating the blog:", error.message);
+    logger.error(
+      `Error occurred while user with ID: ${authorId} tried to update blog: ${blogId}\n${error.message}`,
+    );
+    return {
+      status: 500,
+      message: "Error updating the blog",
+      error: error.message,
+    };
+  }
+};
+
+const getMyBlogs = async (authorId, params) => {
+  try {
+    const page = parseInt(params.page) || 1;
+    const limit = parseInt(params.limit) || 20;
+    const skip = (page - 1) * limit;
+    const tags = params.tags ? params.tags : null;
+    const orderBy = params.orderBy || "-timestamp";
+
+    const searchCriteria = {
+      author: authorId,
+      state: { $in: ["draft", "published"] },
+      ...(tags && { tags: { $in: tags } }),
+    };
+
+    const blogs = await Blog.find(searchCriteria)
+      .skip(skip)
+      .limit(limit)
+      .sort(orderBy)
+      .exec();
+
+    const total = await Blog.countDocuments(searchCriteria);
+
+    logger.info(`User: ${authorId} fetched their blog posts successfully`);
+
+    return {
+      status: 200,
+      message: "Your owned blogs fetched successfully",
+      data: { blogs, page, limit, total },
+    };
+  } catch (error) {
+    console.error("Error occurred while fetching user blogs:", error.message);
+    logger.error(
+      `Error occurred while user with ID: ${authorId} tried to fetch their blogs\n${error.message}`,
+    );
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
 const blogController = {
   createBlog,
   getBlogs,
   getBlog,
+  getMyBlogs,
+  updateBlog,
 };
 
 module.exports = blogController;
