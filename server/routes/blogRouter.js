@@ -6,6 +6,42 @@ const { authenticate, isActivated } = require("../middlewares/authMiddleware");
 const { cloudinary } = require("../config/cloudinary.config");
 const uploader = require("../config/multer.config");
 
+blogRouter.get("", async (req, res) => {
+  try {
+    const params = { ...req.query };
+    const result = await blogController.getBlogs(params);
+
+    if (result.status === 200) {
+      return res
+        .status(result.status)
+        .json({ message: result.message, data: result.data });
+    } else {
+      return res.status(result.status).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error("Error occurred while fetching blogs:", error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+blogRouter.get("/:slugOrId", async (req, res) => {
+  try {
+    const slugOrId = req.params.slugOrId;
+    const result = await blogController.getBlog(slugOrId);
+
+    if (result.status === 200) {
+      return res
+        .status(result.status)
+        .json({ message: result.message, blog: result.blog });
+    } else {
+      return res.status(result.status).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error("Error occurred while fetching the blog:", error.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 blogRouter.post(
   "",
   authenticate,
@@ -51,24 +87,6 @@ blogRouter.post(
   },
 );
 
-blogRouter.get("", async (req, res) => {
-  try {
-    const params = { ...req.query };
-    const result = await blogController.getBlogs(params);
-
-    if (result.status === 200) {
-      return res
-        .status(result.status)
-        .json({ message: result.message, data: result.data });
-    } else {
-      return res.status(result.status).json({ error: result.message });
-    }
-  } catch (error) {
-    console.error("Error occurred while fetching blogs:", error.message);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
-
 blogRouter.get("/my-blogs", authenticate, isActivated, async (req, res) => {
   try {
     const authorId = req.user._id;
@@ -85,24 +103,6 @@ blogRouter.get("/my-blogs", authenticate, isActivated, async (req, res) => {
     }
   } catch (error) {
     console.error("Error occurred while fetching user blogs:", error.message);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-blogRouter.get("/:slugOrId", async (req, res) => {
-  try {
-    const slugOrId = req.params.slugOrId;
-    const result = await blogController.getBlog(slugOrId);
-
-    if (result.status === 200) {
-      return res
-        .status(result.status)
-        .json({ message: result.message, blog: result.blog });
-    } else {
-      return res.status(result.status).json({ error: result.message });
-    }
-  } catch (error) {
-    console.error("Error occurred while fetching the blog:", error.message);
     return res.status(500).json({ error: "Internal server error" });
   }
 });
