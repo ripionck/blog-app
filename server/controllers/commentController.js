@@ -50,6 +50,83 @@ const getComment = async (commentId) => {
   }
 };
 
-const commentController = { getComments, getComment };
+const addComment = async (authorId, blogId, commentData) => {
+  try {
+    const { text, parentCommentId } = commentData;
+
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      return {
+        status: 404,
+        message: `Blog with ID ${blogId} not found`,
+        data: null,
+      };
+    }
+
+    const parentComment = parentCommentId
+      ? await Comment.findById(parentCommentId)
+      : null;
+
+    const comment = new Comment({ text, author: authorId });
+
+    if (parentComment) {
+      parentComment.replies.push(comment);
+      await parentComment.save();
+    } else {
+      blog.comments.push(comment);
+      await blog.save();
+    }
+
+    await comment.save();
+
+    return {
+      status: 201,
+      message: "Comment added successfully",
+      data: comment,
+    };
+  } catch (error) {
+    console.error("Error occurred while adding the comment:", error.message);
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
+const updateComment = async (authorId, commentId, updateData) => {
+  try {
+    const { text } = updateData;
+
+    const comment = await Comment.findOne({
+      _id: commentId,
+      author: authorId,
+      is_deleted: false,
+    });
+
+    if (!comment) {
+      return {
+        status: 404,
+        message: "Comment not found or doesn't belong to you",
+        data: null,
+      };
+    }
+
+    comment.text = text;
+    await comment.save();
+
+    return {
+      status: 200,
+      message: "Comment updated successfully",
+      data: comment,
+    };
+  } catch (error) {
+    console.error("Error occurred while updating the comment:", error.message);
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
+const commentController = {
+  getComments,
+  getComment,
+  addComment,
+  updateComment,
+};
 
 module.exports = commentController;
