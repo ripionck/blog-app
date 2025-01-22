@@ -315,6 +315,42 @@ const publishBlog = async (authorId, blogId) => {
   }
 };
 
+const toggleLikeBlog = async (userId, blogId) => {
+  try {
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return {
+        status: 404,
+        message: "Blog not found or does not exist",
+        data: null,
+      };
+    }
+
+    const isLiked = blog.likes.includes(userId);
+
+    if (isLiked) {
+      blog.likes = blog.likes.filter((like) => like.toString() !== userId);
+    } else {
+      blog.likes.push(userId);
+    }
+
+    await blog.save();
+
+    return {
+      status: 200,
+      message: `Blog ${isLiked ? "unliked" : "liked"} successfully`,
+      blog: blog,
+    };
+  } catch (error) {
+    console.error(
+      "Error occurred while toggling like on the blog:",
+      error.message,
+    );
+    return { status: 500, message: "An error occurred", error: error.message };
+  }
+};
+
 const blogController = {
   createBlog,
   getBlogs,
@@ -323,6 +359,7 @@ const blogController = {
   updateBlog,
   deleteBlog,
   publishBlog,
+  toggleLikeBlog,
 };
 
 module.exports = blogController;

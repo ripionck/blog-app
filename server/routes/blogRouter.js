@@ -184,4 +184,30 @@ blogRouter.post(
   },
 );
 
+blogRouter.post(
+  "/:blogId/like",
+  authenticate,
+  isActivated,
+  async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const blogId = req.params.blogId;
+
+      const result = await blogController.toggleLikeBlog(userId, blogId);
+
+      if (result.status === 200) {
+        return res.status(result.status).json({ message: result.message });
+      } else {
+        return res.status(result.status).json({ error: result.message });
+      }
+    } catch (error) {
+      console.error(
+        "Error occurred while toggling like on the blog:",
+        error.message,
+      );
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
 module.exports = blogRouter;
