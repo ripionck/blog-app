@@ -23,7 +23,7 @@ export default function Newsletter() {
         </form>
         <p className="text-center text-xs text-gray-400 mb-4">
           By subscribing, you agree to our
-          <a href="#" className="text-blue-400 hover:text-blue-300">
+          <a href="#" className="text-blue-400 hover:text-blue-300 ml-1">
             Privacy Policy
           </a>
         </p>

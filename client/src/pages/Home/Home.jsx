@@ -11,7 +11,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const postsPerPage = 5;
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Home = () => {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-1">
           {blogs.map((post, index) => (
             <BlogCard
               key={index}

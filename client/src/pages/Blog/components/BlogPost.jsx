@@ -17,7 +17,10 @@ const BlogPost = ({ blog }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-gray-600">
-              By {blog.author.firstname} {blog.author.lastname}
+              By
+              <span className="italic ml-1">
+                {blog.author.firstname} {blog.author.lastname}
+              </span>
             </span>
             <span className="text-gray-400">•</span>
             <span className="text-gray-600">{blog.reading_time} min read</span>
