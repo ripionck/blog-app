@@ -1,16 +1,15 @@
-import CreateBlogPost from "./pages/Blogs/CreateBlogPost";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
+import Blog from "./pages/Blog/Blog";
 
 const App = () => {
   return (
-    <div>
-      <Register />
-      <Login />
-      <Home />
-      <CreateBlogPost />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blog/:slug" element={<Blog />} />
+      </Routes>
+    </Router>
   );
 };
 
