@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SocialLogin from "./components/SocialLogin";
 
@@ -8,9 +9,9 @@ const Login = () => {
         <h1 className="text-2xl font-bold text-center mb-4">BlogApp</h1>
         <p className="text-center text-gray-600 mb-6">
           New to BlogApp?{" "}
-          <a href="#" className="text-blue-500 hover:underline">
+          <Link to="/sign-up" className="text-blue-500 hover:underline">
             Create an account
-          </a>
+          </Link>
         </p>
         <LoginForm />
         <div className="flex items-center my-4">
