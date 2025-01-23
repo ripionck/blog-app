@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SearchBar from "./components/SearchBar";
-import BlogPostCard from "./components/BlogPostCard";
-import Pagination from "./components/Pagination";
+import Navbar from "../../components/Navbar";
+import BlogCard from "./components/BlogCard";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("Most Recent");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -36,31 +34,30 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <SearchBar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-      />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs &&
-          blogs.map((post) => {
-            return (
-              <BlogPostCard
-                key={post._id}
-                post={post}
-                onClick={() => handleBlogClick(post)}
-              />
-            );
-          })}
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={setCurrentPage}
-      />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          {blogs.map((post, index) => (
+            <BlogCard
+              key={index}
+              {...post}
+              onClick={() => handleBlogClick(post)}
+            />
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-8">
+          <button
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg 
+                           font-medium transition-colors duration-200"
+            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+          >
+            Load More Posts
+          </button>
+        </div>
+      </main>
     </div>
   );
 }
