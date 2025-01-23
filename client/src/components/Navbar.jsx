@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import ThemeToggle from "./ThemeToggle";
 import Profile from "./Profile";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ searchQuery, onSearchQuery, isLoggedIn }) => (
   <div className="w-full bg-white dark:bg-gray-800 shadow-sm">
@@ -11,6 +12,13 @@ const Navbar = ({ searchQuery, onSearchQuery, isLoggedIn }) => (
         <Logo />
         <SearchBar searchQuery={searchQuery} onSearchQuery={onSearchQuery} />
         <div className="flex items-center space-x-4">
+          {isLoggedIn && (
+            <Link to="/create-post">
+              <button className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                Create Post
+              </button>
+            </Link>
+          )}
           <ThemeToggle />
           <Profile isLoggedIn={isLoggedIn} />
         </div>

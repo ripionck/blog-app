@@ -9,7 +9,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const postsPerPage = 5;
   const navigate = useNavigate();
