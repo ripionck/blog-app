@@ -1,5 +1,6 @@
 import { Twitter, Linkedin, ThumbsUp, MessageSquare } from "lucide-react";
 import PropTypes from "prop-types";
+import { formatDate } from "../../../utils/formatDate";
 
 const BlogPost = ({ blog }) => {
   return (
@@ -8,7 +9,7 @@ const BlogPost = ({ blog }) => {
         <div className="flex justify-between items-center mb-4">
           <span className="text-blue-600 text-sm">Technology</span>
           <span className="text-gray-500 text-sm">
-            {new Date(blog.timestamp).toLocaleDateString()}
+            {formatDate(blog.timestamp)}
           </span>
         </div>
 

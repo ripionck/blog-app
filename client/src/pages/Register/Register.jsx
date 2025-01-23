@@ -1,7 +1,22 @@
 import { Link } from "react-router-dom";
 import RegisterForm from "./components/RegisterForm";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const handleRegister = async (formData) => {
+    try {
+      const response = await axios.post("/api/register", formData);
+      if (response.status === 200) {
+        toast.success("Registration successful!");
+      }
+    } catch (error) {
+      toast.error("Registration failed. Please try again.");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -12,8 +27,9 @@ const Register = () => {
             Sign in
           </Link>
         </p>
-        <RegisterForm />
+        <RegisterForm onSubmit={handleRegister} />
       </div>
+      <ToastContainer />
     </div>
   );
 };

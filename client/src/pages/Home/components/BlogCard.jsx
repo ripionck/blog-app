@@ -1,10 +1,6 @@
 import { ThumbsUp, MessageSquare, ArrowRight } from "lucide-react";
 import PropTypes from "prop-types";
-
-const formatDate = (dateString) => {
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
+import { formatDate } from "../../../utils/formatDate";
 
 const BlogCard = ({
   tags,
