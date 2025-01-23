@@ -2,61 +2,65 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
-const UserSchema = new Schema({
-  firstname: {
-    type: String,
-    required: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    unique: true,
-  },
-  role: {
-    type: String,
-    enum: ["admin", "user"],
-    default: "user",
-  },
-  active: {
-    type: Boolean,
-    default: false,
-  },
-  activationToken: {
-    type: String,
-  },
-});
 
+const UserSchema = new Schema(
+  {
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      unique: true,
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    activationToken: {
+      type: String,
+    },
+  },
+  { timestamps: true },
+);
+
+// Hash the password before saving the user
 UserSchema.pre("save", async function (next) {
-  const hashedpassword = await bcrypt.hash(this.password, 10);
-  this.password = hashedpassword;
+  const hashedPassword = await bcrypt.hash(this.password, 10);
+  this.password = hashedPassword;
   next();
 });
 
+// Method to check if the password is valid
 UserSchema.methods.isValidPassword = async function (password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
   return compare;
 };
 
-UserSchema.methods.isAdmin = async function () {
+// Method to check if the user is an admin
+UserSchema.methods.isAdmin = function () {
   const user = this;
-  if (user.role == "admin") {
-    return true;
-  }
-  return false;
+  return user.role === "admin";
 };
 
 const UserModel = mongoose.model("User", UserSchema);

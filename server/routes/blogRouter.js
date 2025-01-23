@@ -6,7 +6,7 @@ const { authenticate, isActivated } = require("../middlewares/authMiddleware");
 const { cloudinary } = require("../config/cloudinary.config");
 const uploader = require("../config/multer.config");
 
-blogRouter.get("", async (req, res) => {
+blogRouter.get("/", async (req, res) => {
   try {
     const params = { ...req.query };
     const result = await blogController.getBlogs(params);

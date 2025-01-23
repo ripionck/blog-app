@@ -4,7 +4,13 @@ const logger = require("../utils/logger");
 
 const getComments = async (blogId) => {
   try {
-    const blog = await Blog.findById(blogId).populate("comments");
+    const blog = await Blog.findById(blogId).populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: "firstname lastname avatar",
+      },
+    });
 
     if (!blog) {
       return {

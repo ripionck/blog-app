@@ -3,7 +3,7 @@ const commentRouter = express.Router();
 const { authenticate, isActivated } = require("../middlewares/authMiddleware");
 const commentController = require("../controllers/commentController");
 
-commentRouter.get("", async (req, res) => {
+commentRouter.get("/", async (req, res) => {
   try {
     const blogId = req.query.blogId;
 
