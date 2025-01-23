@@ -37,26 +37,21 @@ const BlogCard = ({
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
             <ThumbsUp className="h-5 w-5 text-gray-400" />
-            <span className="text-gray-500 dark:text-gray-400">
-              {likes.length}
-            </span>
+            <span className="text-gray-500 dark:text-gray-400">{likes}</span>
           </div>
           <div className="flex items-center space-x-1">
             <MessageSquare className="h-5 w-5 text-gray-400" />
-            <span className="text-gray-500 dark:text-gray-400">
-              {comments.length}
-            </span>
+            <span className="text-gray-500 dark:text-gray-400">{comments}</span>
           </div>
         </div>
-        <a
-          href="#"
+        <button
           className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 
                               flex items-center space-x-1 text-sm font-medium"
           onClick={onClick}
         >
           <span>Read More</span>
           <ArrowRight className="h-4 w-4" />
-        </a>
+        </button>
       </div>
     </div>
   );

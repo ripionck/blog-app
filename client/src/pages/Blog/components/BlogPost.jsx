@@ -40,11 +40,11 @@ const BlogPost = ({ blog }) => {
       </div>
       <div className="flex items-center gap-6 my-8 pt-4 border-t">
         <button className="flex items-center gap-2 text-gray-600">
-          <ThumbsUp className="w-6 h-6" />
+          <ThumbsUp className="w-5 h-5" />
           {blog.likes.length} likes
         </button>
         <button className="flex items-center gap-2 text-gray-600">
-          <MessageSquare className="w-6 h-6" />
+          <MessageSquare className="w-5 h-5" />
           {blog.comments.length} comments
         </button>
       </div>
