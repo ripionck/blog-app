@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import BlogCard from "./components/BlogCard";
 import Pagination from "../../components/Pagination";
+import Newsletter from "../../components/Newsletter";
+import Footer from "../../components/Footer";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,6 +70,8 @@ const Home = () => {
           />
         </div>
       </main>
+      <Newsletter />
+      <Footer />
     </div>
   );
 };
