@@ -4,7 +4,7 @@ import Blog from "./pages/Blog/Blog";
 import ProfilePage from "./pages/profile/ProfilePage";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import CreateBlogPost from "./pages/Blog/create/CreateBlogPost";
+import CreateBlogPost from "./pages/CreateBlog/CreateBlogPost";
 
 const App = () => {
   return (
