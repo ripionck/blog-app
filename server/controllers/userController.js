@@ -176,6 +176,20 @@ const login = async function (loginData) {
   }
 };
 
+const verifyToken = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    res.status(200).json({ message: "Token is valid", user: decoded });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
+
 const forgotPassword = async (email) => {
   try {
     const token = jwt.sign({ email }, process.env.SECRET_KEY, {
@@ -233,6 +247,7 @@ const userController = {
   resendActivationMail,
   activateAccount,
   login,
+  verifyToken,
   forgotPassword,
   resetPassword,
 };

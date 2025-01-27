@@ -79,6 +79,9 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
+// Verify Token
+userRouter.get("/verify-token", userController.verifyToken);
+
 // Forgot Password Route
 userRouter.post("/forgot-password", async (req, res) => {
   try {
