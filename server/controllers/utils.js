@@ -1,4 +1,3 @@
-const slug = require("slug");
 const ShortUniqueId = require("short-unique-id");
 const crypto = require("crypto");
 

@@ -17,17 +17,15 @@ userRouter.post("/signup", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An internal server error occurred. Please try again later.",
-      });
+    res.status(500).json({
+      error: "An internal server error occurred. Please try again later.",
+    });
   }
 });
 
 // Activate Account Route
-userRouter.post("/activate", async (req, res) => {
-  const { token } = req.body;
+userRouter.get("/activate", async (req, res) => {
+  const { token } = req.query;
 
   if (!token) {
     return res.status(400).json({ error: "Activation token is required." });
@@ -36,9 +34,9 @@ userRouter.post("/activate", async (req, res) => {
   const result = await userController.activateAccount(token);
 
   if (result.status === 200) {
-    res.status(200).json({ message: result.message });
+    return res.status(200).json({ message: "Account activated successfully!" });
   } else {
-    res.status(result.status).json({ error: result.message });
+    return res.status(result.status).json({ error: result.message });
   }
 });
 
@@ -61,11 +59,9 @@ userRouter.post("/resend-activation", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An internal server error occurred. Please try again later.",
-      });
+    res.status(500).json({
+      error: "An internal server error occurred. Please try again later.",
+    });
   }
 });
 
@@ -102,11 +98,9 @@ userRouter.post("/forgot-password", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An internal server error occurred. Please try again later.",
-      });
+    res.status(500).json({
+      error: "An internal server error occurred. Please try again later.",
+    });
   }
 });
 
@@ -128,11 +122,9 @@ userRouter.post("/reset-password", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        error: "An internal server error occurred. Please try again later.",
-      });
+    res.status(500).json({
+      error: "An internal server error occurred. Please try again later.",
+    });
   }
 });
 

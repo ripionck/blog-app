@@ -16,19 +16,18 @@ const config = {
 
 const sendMail = async (data) => {
   const transporter = nodemailer.createTransport(config);
-  transporter.sendMail(data, (err, info) => {
-    if (err) {
-      logger.error(`Error sending email to ${data.to}: ${err.message}`);
-      throw new Error(`Error sending email to ${data.to}: ${err.message}`);
-    } else {
-      logger.info(`Email "${data.subject}" sent successfully to ${data.to}`);
-    }
-  });
+  try {
+    await transporter.sendMail(data);
+    logger.info(`Email "${data.subject}" sent successfully to ${data.to}`);
+  } catch (err) {
+    logger.error(`Error sending email to ${data.to}: ${err.message}`);
+    throw new Error(`Error sending email to ${data.to}: ${err.message}`);
+  }
 };
 
 const generateActivationUrl = async (activationToken) => {
-  const webURL = process.env.WEB_URL || "http://localhost:3001";
-  return `${webURL}/activate-account?token=${activationToken}`;
+  const webURL = process.env.WEB_URL || "http://localhost:5174";
+  return `${webURL}/activate?token=${activationToken}`;
 };
 
 const sendActivationMail = async (email, firstname, activationToken) => {
@@ -62,7 +61,7 @@ const sendActivationMail = async (email, firstname, activationToken) => {
 };
 
 const sendForgotPasswordMail = async (email, firstname, token) => {
-  const webURL = process.env.WEB_URL || "http://localhost:3001";
+  const webURL = process.env.WEB_URL || "http://localhost:5174";
   const url = `${webURL}/reset-password/${token}`;
 
   const emailData = {

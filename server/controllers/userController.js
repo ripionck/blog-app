@@ -113,33 +113,28 @@ const resendActivationMail = async (email) => {
 
 const activateAccount = async (token) => {
   try {
-    const validToken = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-    if (validToken.type !== "activation") {
+    if (decoded.type !== "activation") {
       return { status: 400, message: "Invalid activation token." };
     }
 
-    const existingUser = await UserModel.findOneAndUpdate(
-      { email: validToken.email },
+    const user = await UserModel.findOneAndUpdate(
+      { email: decoded.email },
       { $set: { active: true } },
       { new: true },
     );
 
-    if (!existingUser) {
-      return { status: 404, message: "No user found with this email address." };
+    if (!user) {
+      return { status: 404, message: "User not found." };
     }
 
-    logger.info(`Account successfully activated for ${existingUser.email}`);
-    return {
-      status: 200,
-      message: "Your account has been activated successfully.",
-    };
+    return { status: 200, message: "Account activated successfully!" };
   } catch (error) {
-    logger.error("Error during account activation:", error);
-    return {
-      status: 500,
-      message: "An error occurred while activating your account.",
-    };
+    if (error.name === "TokenExpiredError") {
+      return { status: 400, message: "Activation link has expired." };
+    }
+    return { status: 500, message: "Invalid or corrupted activation link." };
   }
 };
 
