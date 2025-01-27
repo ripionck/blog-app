@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-import SocialLogin from "./components/SocialLogin";
+import LoginForm from "../../components/login/LoginForm";
+import SocialLogin from "../../components/login/SocialLogin";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +17,7 @@ const Login = () => {
       console.log(response);
       if (response.status === 200) {
         toast.success("Login successful!");
+        localStorage.setItem("authToken", response.data.token);
         navigate("/");
       }
     } catch (error) {

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import ProfileHeader from "./components/ProfileHeader";
-import NavigationTabs from "./components/NavigationTabs";
-import PostCard from "./components/PostCard";
+import ProfileHeader from "../../components/profile/ProfileHeader";
+import NavigationTabs from "../../components/profile/NavigationTabs";
+import PostCard from "./AllPosts/PostCard";
+import BackButton from "../../components/common/BackButton";
 
-const ProfilePage = () => {
+const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const handleTabChange = (tab) => {
@@ -12,6 +13,7 @@ const ProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <BackButton />
       <ProfileHeader
         initials="JD"
         name="John Doe"
@@ -86,4 +88,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;

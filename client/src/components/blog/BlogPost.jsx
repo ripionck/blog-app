@@ -1,10 +1,12 @@
 import { Twitter, Linkedin, ThumbsUp, MessageSquare } from "lucide-react";
 import PropTypes from "prop-types";
-import { formatDate } from "../../../utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
+import BackButton from "../common/BackButton";
 
 const BlogPost = ({ blog }) => {
   return (
     <article className="py-8">
+      <BackButton />
       <header className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <span className="text-blue-600 text-sm">Technology</span>

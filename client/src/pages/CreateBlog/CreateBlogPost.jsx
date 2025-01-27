@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { createPost } from "./createPost";
-import TextEditor from "./components/TextEditor";
+import TextEditor from "../../components/createBlog/TextEditor";
 import { Loader2 } from "lucide-react";
+import BackButton from "../../components/common/BackButton";
 
 export default function CreateBlog() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,6 +95,7 @@ export default function CreateBlog() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <BackButton />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Create New Blog Post

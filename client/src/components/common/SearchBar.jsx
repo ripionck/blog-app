@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default function SearchBar({ searchQuery, onSearchQuery }) {
   return (
-    <div className="max-w-full mx-auto px-6 my-8">
+    <div className="max-w-2xl mx-auto px-6 my-8">
       <div className="relative">
         <input
           type="text"

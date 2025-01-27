@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import RegisterForm from "./components/RegisterForm";
+import RegisterForm from "../../components/register/RegisterForm";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

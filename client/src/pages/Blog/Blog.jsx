@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import BlogPost from "./components/BlogPost";
-import CommentsSection from "./components/CommentsSection";
+import BlogPost from "../../components/blog/BlogPost";
+import CommentsSection from "../../components/blog/CommentsSection";
 
 const Blog = () => {
   const { slug } = useParams();

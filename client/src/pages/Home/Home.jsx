@@ -11,7 +11,6 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const postsPerPage = 5;
   const navigate = useNavigate();
@@ -49,11 +48,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Navbar
-        searchQuery={searchQuery}
-        onSearchQuery={setSearchQuery}
-        isLoggedIn={isLoggedIn}
-      />
+      <Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid gap-6 md:grid-cols-1">
