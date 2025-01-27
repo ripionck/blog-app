@@ -14,10 +14,10 @@ const Navbar = ({ searchQuery, onSearchQuery, isLoggedIn }) => (
         <SearchBar searchQuery={searchQuery} onSearchQuery={onSearchQuery} />
         <div className="flex items-center space-x-4">
           {isLoggedIn && (
-            <Link to="/create-post">
+            <Link to="/create-blog">
               <button className="flex items-center px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                 <Plus />
-                Create Post
+                Create Blog
               </button>
             </Link>
           )}

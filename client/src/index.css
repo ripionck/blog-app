@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+[contenteditable] {
+  outline: none;
+}
+
+[contenteditable]:focus {
+  border-color: #3b82f6;
+}
+
+[contenteditable] pre {
+  background: #f3f4f6;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+[contenteditable] blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #4b5563;
+}
+
+[contenteditable] img {
+  max-width: 100%;
+  height: auto;
+}

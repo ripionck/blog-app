@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SocialLogin from "./components/SocialLogin";
 import axios from "axios";
@@ -6,11 +6,18 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const handleLogin = async (formData) => {
     try {
-      const response = await axios.post("/api/login", formData);
+      const response = await axios.post(
+        "http://localhost:3001/api/users/login",
+        formData,
+      );
+      console.log(response);
       if (response.status === 200) {
         toast.success("Login successful!");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/common/Navbar";
 import BlogCard from "./components/BlogCard";
-import Pagination from "../../components/Pagination";
-import Newsletter from "../../components/Newsletter";
-import Footer from "../../components/Footer";
+import Pagination from "../../components/common/Pagination";
+import Newsletter from "../../components/common/Newsletter";
+import Footer from "../../components/common/Footer";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +41,12 @@ const Home = () => {
     setCurrentPage(page);
   };
 
+  const filteredBlogs = blogs.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content?.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar
@@ -51,7 +57,7 @@ const Home = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid gap-6 md:grid-cols-1">
-          {blogs.map((post, index) => (
+          {filteredBlogs.map((post, index) => (
             <BlogCard
               key={index}
               {...post}
