@@ -70,7 +70,7 @@ userRouter.post("/login", async (req, res) => {
   const loginData = req.body;
   const result = await userController.login(loginData);
 
-  if (result.status === 201) {
+  if (result.status === 200) {
     res
       .status(result.status)
       .json({ message: result.message, token: result.token });

@@ -166,7 +166,7 @@ const login = async function (loginData) {
     });
 
     logger.info(`${loginData.email} logged in successfully.`);
-    return { status: 201, message: "Login successful.", token };
+    return { status: 200, message: "Login successful.", token };
   } catch (error) {
     logger.error(`Error during login for ${loginData.email}: ${error}`);
     return {
